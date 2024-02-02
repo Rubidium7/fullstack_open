@@ -1,20 +1,10 @@
 
 const Header = (props) => {
-	return (
-		<>
-			<h1>{props.course}</h1>
-		</>
-	)
+	return <h1>{props.course}</h1>
 }
 
 const Part = (props) => {
-	return (
-		<>
-			<p>
-				{props.part} {props.exercises}
-			</p>
-		</>
-	)
+	return <p>{props.part} {props.exercises}</p>
 }
 
 const Content = (props) => {

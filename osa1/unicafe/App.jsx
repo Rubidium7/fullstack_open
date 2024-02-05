@@ -13,6 +13,29 @@ const PrintState = ({name, count}) => {
 	return <p>{name} {count}{end}</p>
 }
 
+const Statistics = ({good, neutral, bad}) => {
+
+	const all = good + neutral + bad
+	let average = 0
+	let positive = 0
+	if (all != 0) {
+		average = (good * 1 + bad * -1) / all
+		positive = good * 100 / all
+	}
+
+	return (
+		<div>
+		<Header name="statistics" />
+		<PrintState name="good" count={good} />
+		<PrintState name="neutral" count={neutral} />
+		<PrintState name="bad" count={bad} />
+		<PrintState name="all" count={all} />
+		<PrintState name="average" count={average} />
+		<PrintState name="positive" count={positive} />	
+		</div>
+	)
+}
+
 const App = () => {
 
 	const [good, setGood] = useState(0)
@@ -31,13 +54,6 @@ const App = () => {
 		setBad(bad + 1)
 	}
 	
-	const all = good + neutral + bad
-	let average = 0
-	let positive = 0
-	if (all != 0) {
-		average = (good * 1 + bad * -1) / all
-		positive = good * 100 / all
-	}
 	return (
 		<div>
 			<Header name="give feedback" />
@@ -50,13 +66,7 @@ const App = () => {
 			<button onClick={handleClickBad}>
 				bad
 			</button>
-			<Header name="statistics" />
-			<PrintState name="good" count={good} />
-			<PrintState name="neutral" count={neutral} />
-			<PrintState name="bad" count={bad} />
-			<PrintState name="all" count={all} />
-			<PrintState name="average" count={average} />
-			<PrintState name="positive" count={positive} />
+			<Statistics good={good} neutral={neutral} bad={bad} />
 		</div>
 	)
 }

@@ -7,7 +7,10 @@ const Header = ({name}) => {
 
 const PrintState = ({name, count}) => {
 
-	return <p>{name} {count}</p>
+	let end = ""
+	if (name == "positive")
+		end = " %"
+	return <p>{name} {count}{end}</p>
 }
 
 const App = () => {
@@ -30,8 +33,11 @@ const App = () => {
 	
 	const all = good + neutral + bad
 	let average = 0
-	if (all != 0)
+	let positive = 0
+	if (all != 0) {
 		average = (good * 1 + bad * -1) / all
+		positive = good * 100 / all
+	}
 	return (
 		<div>
 			<Header name="give feedback" />
@@ -50,7 +56,7 @@ const App = () => {
 			<PrintState name="bad" count={bad} />
 			<PrintState name="all" count={all} />
 			<PrintState name="average" count={average} />
-			
+			<PrintState name="positive" count={positive} />
 		</div>
 	)
 }

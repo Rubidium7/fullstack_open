@@ -28,6 +28,10 @@ const App = () => {
 		setBad(bad + 1)
 	}
 	
+	const all = good + neutral + bad
+	let average = 0
+	if (all != 0)
+		average = (good * 1 + bad * -1) / all
 	return (
 		<div>
 			<Header name="give feedback" />
@@ -44,6 +48,9 @@ const App = () => {
 			<PrintState name="good" count={good} />
 			<PrintState name="neutral" count={neutral} />
 			<PrintState name="bad" count={bad} />
+			<PrintState name="all" count={all} />
+			<PrintState name="average" count={average} />
+			
 		</div>
 	)
 }

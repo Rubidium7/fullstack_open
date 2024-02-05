@@ -5,12 +5,23 @@ const Header = ({name}) => {
 	return <h1>{name}</h1>
 }
 
-const PrintState = ({name, count}) => {
+const Button = ({command, name}) => {
+
+	return (
+		<>
+		<button onClick={command}>
+			{name}
+		</button>
+		</>
+	)
+}
+
+const StatisticLine = ({text, value}) => {
 
 	let end = ""
-	if (name == "positive")
+	if (text == "positive")
 		end = " %"
-	return <p>{name} {count}{end}</p>
+	return <p>{text} {value}{end}</p>
 }
 
 const Statistics = ({good, neutral, bad}) => {
@@ -24,12 +35,12 @@ const Statistics = ({good, neutral, bad}) => {
 
 	return (
 		<div>
-		<PrintState name="good" count={good} />
-		<PrintState name="neutral" count={neutral} />
-		<PrintState name="bad" count={bad} />
-		<PrintState name="all" count={all} />
-		<PrintState name="average" count={average} />
-		<PrintState name="positive" count={positive} />	
+		<StatisticLine text="good" value={good} />
+		<StatisticLine text="neutral" value={neutral} />
+		<StatisticLine text="bad" value={bad} />
+		<StatisticLine text="all" value={all} />
+		<StatisticLine text="average" value={average} />
+		<StatisticLine text="positive" value={positive} />	
 		</div>
 	)
 }
@@ -55,15 +66,9 @@ const App = () => {
 	return (
 		<div>
 			<Header name="give feedback" />
-			<button onClick={handleClickGood}>
-				good
-			</button>
-			<button onClick={handleClickNeutral}>
-				neutral
-			</button>
-			<button onClick={handleClickBad}>
-			bad
-			</button>
+			<Button command={handleClickGood} name="good" />
+			<Button command={handleClickNeutral} name="neutral" />
+			<Button command={handleClickBad} name="bad" />
 			<Header name="statistics" />
 			<Statistics good={good} neutral={neutral} bad={bad} />
 		</div>

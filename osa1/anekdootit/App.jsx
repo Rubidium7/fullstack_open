@@ -12,16 +12,30 @@ const App = () => {
 				'The only way to go fast, is to go well.'
 		]
 
+		const template_points = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}
+
+		const [points, setPoints] = useState({ ...template_points })
+
 		const [selected, setSelected] = useState(0)
 
-		const handleClick = () => {
-				setSelected(Math.floor(Math.random() * 8))
+		const handleClickVote = () => {
+			const newPoints = {
+				...points,
+				[selected]: points[selected] + 1
+			}
+			setPoints(newPoints)
+		}
+
+		const handleClickNext = () => {
+			setSelected(Math.floor(Math.random() * 8))
 		}
 
 		return (
 			<div>
 				<p>{anecdotes[selected]}</p>
-				<button onClick={handleClick}>next anecdote</button>
+				<p>has {points[selected]} votes</p>
+				<button onClick={handleClickVote}>vote</button>
+				<button onClick={handleClickNext}>next anecdote</button>
 			</div>
 		)
 }

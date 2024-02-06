@@ -1,5 +1,21 @@
 import { useState } from 'react'
 
+const Header = ({text}) => {
+	return <h1>{text}</h1>
+}
+
+const MostVotes = ({anecdotes, index, points}) => {
+
+	if (index == -1)
+		return <></>
+	return (
+		<>
+			<p>{anecdotes[index]}</p>
+			<p>has {points} votes</p>
+		</>
+	)
+}
+
 const App = () => {
 		const anecdotes = [
 				'If it hurts, do it more often.',
@@ -18,6 +34,18 @@ const App = () => {
 
 		const [selected, setSelected] = useState(0)
 
+		const values = Object.values(points)
+
+		const highest = Math.max(...values)
+
+		let index = -1
+		for (const key in points) {
+			if (points[key] == highest && highest)
+				index = key
+			if (index != -1)
+				break
+		}
+
 		const handleClickVote = () => {
 			const newPoints = {
 				...points,
@@ -32,10 +60,13 @@ const App = () => {
 
 		return (
 			<div>
+				<Header text="Anecdote of the day" />
 				<p>{anecdotes[selected]}</p>
 				<p>has {points[selected]} votes</p>
 				<button onClick={handleClickVote}>vote</button>
 				<button onClick={handleClickNext}>next anecdote</button>
+				<Header text="Anecdote with most votes" />
+				<MostVotes anecdotes={anecdotes} index={index} points={points[index]}/>
 			</div>
 		)
 }

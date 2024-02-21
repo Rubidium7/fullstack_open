@@ -58,8 +58,8 @@ const App = () => {
 	useEffect(() => {
 		dataService
 			.getAll()
-			.then(response => {
-				setPersons(response.data)
+			.then(initialPersons => {
+				setPersons(initialPersons)
 			})
 	}, [])
 
@@ -68,15 +68,25 @@ const App = () => {
 		
 		const found = persons.find(person => person.name == newName)
 		if (newName == '' || newNumber == '')
-			window.alert('fill both fields')
-		else if (found != undefined)
-			window.alert(`${newName} is already added to the phonebook`)
+			alert('fill both fields')
+		else if (found != undefined) {
+			if (confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+				const changedPerson = { ...found, number: newNumber }
+				dataService
+					.update(changedPerson.id, changedPerson)
+					.then(returnedPerson => {
+					setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))	
+					setNewName('')
+					setNewNumber('')
+					})
+			}
+		}	
 		else {
 			const personObject = { name: newName, number: newNumber }
 			dataService
 				.create(personObject)
-				.then(response => {
-					setPersons(persons.concat(response.data))
+				.then(newPerson => {
+					setPersons(persons.concat(newPerson))
 					setNewName('')
 					setNewNumber('')
 				})
@@ -87,8 +97,8 @@ const App = () => {
 		if (confirm(`Delete ${name} ?`)) {
 			dataService
 				.remove(id)
-				.then(response => {
-				setPersons(persons.filter(person => person.id !== id))	
+				.then(deletedPerson => {
+				setPersons(persons.filter(person => person.id !== deletedPerson.id))	
 				})
 		}
 	}

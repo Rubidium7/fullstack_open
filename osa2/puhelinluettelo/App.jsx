@@ -48,12 +48,52 @@ const Persons = ({persons, filter, removePerson}) => {
 	)
 }
 
+const Notification = ({message, happy}) => {
+	const happyStyle = {
+		color: 'green',
+		fontStyle: 'italic',
+		fontFamily: 'comic sans ms',
+		fontSize: 20,
+		background: 'lightgray',
+		borderStyle: 'solid',
+		padding: 10,
+		marginBottom: 10
+	}
+
+	const angryStyle = {
+		color: 'red',
+		fontStyle: 'italic',
+		fontFamily: 'comic sans ms',
+		fontSize: 20,
+		background: 'lightgray',
+		borderStyle: 'solid',
+		padding: 10,
+		marginBottom: 10
+	}
+	
+	let setStyle
+
+	if (message === null)
+		return
+	if (happy)
+		setStyle = happyStyle
+	else
+		setStyle = angryStyle
+	return (
+		<div style={setStyle}>
+			{message}
+		</div>
+	)
+}
+
 const App = () => {
 	const [persons, setPersons] = useState([])
 
 	const [newFilter, setNewFilter] = useState('')
 	const [newName, setNewName] = useState('')
 	const [newNumber, setNewNumber] = useState('')
+	const [notifMessage, setNotifMessage] = useState(null)
+	const [happy, setHappy] = useState(true)
 
 	useEffect(() => {
 		dataService
@@ -78,6 +118,11 @@ const App = () => {
 					setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))	
 					setNewName('')
 					setNewNumber('')
+					setHappy(true)
+					setNotifMessage(`Updated the number of ${newName}`)
+					setTimeout(() => {
+						setNotifMessage(null)
+					}, 2500)
 					})
 			}
 		}	
@@ -89,6 +134,11 @@ const App = () => {
 					setPersons(persons.concat(newPerson))
 					setNewName('')
 					setNewNumber('')
+					setHappy(true)
+					setNotifMessage(`Added ${newName}`)
+					setTimeout(() => {
+						setNotifMessage(null)
+					}, 2500)
 				})
 		}
 	}
@@ -99,6 +149,11 @@ const App = () => {
 				.remove(id)
 				.then(deletedPerson => {
 				setPersons(persons.filter(person => person.id !== deletedPerson.id))	
+				setHappy(false)
+				setNotifMessage(`Removed ${name}`)
+				setTimeout(() => {
+					setNotifMessage(null)
+				}, 2500)
 				})
 		}
 	}
@@ -121,7 +176,9 @@ const App = () => {
 	return (
 		<div>
 		<h2>Phonebook</h2>
-		
+
+		<Notification message={notifMessage} happy={happy}/>
+
 		<Filter filter={newFilter} handler={handleFilterChange}/>
 
 		<h3>Add a new</h3>

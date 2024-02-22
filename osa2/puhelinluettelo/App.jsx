@@ -124,6 +124,16 @@ const App = () => {
 						setNotifMessage(null)
 					}, 2500)
 					})
+					.catch(error => {
+					setPersons(persons.filter(person => person.id !== changedPerson.id))	
+					setNewName('')
+					setNewNumber('')
+					setHappy(false)
+					setNotifMessage(`Information of ${newName} has already been removed from server`)
+					setTimeout(() => {
+						setNotifMessage(null)
+					}, 2500)
+					})
 			}
 		}	
 		else {
@@ -149,11 +159,19 @@ const App = () => {
 				.remove(id)
 				.then(deletedPerson => {
 				setPersons(persons.filter(person => person.id !== deletedPerson.id))	
-				setHappy(false)
+				setHappy(true)
 				setNotifMessage(`Removed ${name}`)
 				setTimeout(() => {
 					setNotifMessage(null)
 				}, 2500)
+				})
+				.catch(error => {
+				setPersons(persons.filter(person => person.id !== id))	
+				setHappy(false)
+				setNotifMessage(`Information of ${name} has already been removed from the server`)
+				setTimeout(() => {
+					setNotifMessage(null)
+				}, 2500)				
 				})
 		}
 	}

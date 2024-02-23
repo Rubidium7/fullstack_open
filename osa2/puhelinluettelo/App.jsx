@@ -177,17 +177,17 @@ const App = () => {
 	}
 
 	const handleFilterChange = (event) => {
-		console.log(event.target.Value)
+		console.log(event.target.value)
 		setNewFilter(event.target.value)
 	}
 
 	const handleNameChange = (event) => {
-		console.log(event.target.Value)
+		console.log(event.target.value)
 		setNewName(event.target.value)
 	}
 
 	const handleNumberChange = (event) => {
-		console.log(event.target.Value)
+		console.log(event.target.value)
 		setNewNumber(event.target.value)
 	}
 

@@ -12,12 +12,34 @@ const CountryForm = ({country, handler}) => {
 	)
 }
 
+const DisplayOneCountry = ({country}) => {
+	const languages = Object.values(country.languages)
+
+
+
+	console.log(languages)
+	return (
+		<>
+		<h1>{country.name.common}</h1>
+		<p>capital {country.capital.at(0)}</p>
+		<p>area {country.area}</p>
+		<p><strong>languages:</strong></p>	
+		<ul>
+			{languages.map(language => <li key={language}>{language}</li>)}
+		</ul>
+		<img src={country.flags.png}/>
+		</>
+	)
+}
+
 const DisplayCountries = ({filter, countries}) => {
 
 	if (!filter)
 		return
 	else if (countries.length > 10)
 		return <p>Too many matches, specify another filter</p>
+	else if (countries.length === 1)
+		return <DisplayOneCountry country={countries.at(0)} />
 	return (
 		<>
 			{countries.map(country => {
@@ -43,7 +65,7 @@ const App = () => {
 
 	const handleCountryFilterChange = (event) => {
 		console.log(event.target.value)
-		setCountryFilter(event.target.value)
+		setCountryFilter(event.target.value.toLowerCase())
 	}
 
 	return (

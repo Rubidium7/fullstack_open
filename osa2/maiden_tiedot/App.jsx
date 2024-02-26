@@ -14,14 +14,15 @@ const CountryForm = ({country, handler}) => {
 
 const DisplayOneCountry = ({country}) => {
 	const languages = Object.values(country.languages)
-
-
-
-	console.log(languages)
+	let capital
+	if (!country.capital)
+		capital = '>NOT FOUND<'
+	else
+		capital = country.capital.at(0)
 	return (
 		<>
 		<h1>{country.name.common}</h1>
-		<p>capital {country.capital.at(0)}</p>
+		<p>capital {capital}</p>
 		<p>area {country.area}</p>
 		<p><strong>languages:</strong></p>	
 		<ul>
@@ -32,7 +33,7 @@ const DisplayOneCountry = ({country}) => {
 	)
 }
 
-const DisplayCountries = ({filter, countries}) => {
+const DisplayCountries = ({filter, countries, handler}) => {
 
 	if (!filter)
 		return
@@ -43,8 +44,12 @@ const DisplayCountries = ({filter, countries}) => {
 	return (
 		<>
 			{countries.map(country => {
-				return <p key={country.name.common}>{country.name.common}</p>
-			})}
+				return (
+					<div key={country.name.common}>
+						<p>{country.name.common}</p>
+						<button onClick={() => handler(country.name.common)}>show</button>
+					</div>
+				)})}
 		</>
 	)
 }
@@ -58,21 +63,27 @@ const App = () => {
 			.getAll()
 			.then(response => {
 				setCountries(response.filter(country => {
-					return country.name.common.toLowerCase().includes(countryFilter)
+					return country.name.common.toLowerCase().includes(countryFilter.toLowerCase())
 				}))
 			})
 	}, [countryFilter])
 
 	const handleCountryFilterChange = (event) => {
 		console.log(event.target.value)
-		setCountryFilter(event.target.value.toLowerCase())
+		setCountryFilter(event.target.value)
+	}
+
+	const changeFilter = (country) => {
+		console.log(country)
+		setCountryFilter(country)
 	}
 
 	return (
 		<div>
 		<CountryForm country={countryFilter}
 			handler={handleCountryFilterChange}/>
-		<DisplayCountries filter={countryFilter} countries={countries} />
+		<DisplayCountries filter={countryFilter} countries={countries}
+			handler={changeFilter}/>
 		</div>
 	)
 }

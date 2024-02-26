@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react'
 import countryService from './services/countries'
+import weatherService from './services/weather'
 
 const CountryForm = ({country, handler}) => {
 	return (
@@ -12,8 +13,53 @@ const CountryForm = ({country, handler}) => {
 	)
 }
 
+const DisplayWeather = ({country}) => {
+	const [weather, setWeather] = useState([])
+	const [weatherImage, setWeatherImage] = useState(null)
+
+	let where_weather = country.name.common
+	let lat = country.latlng.at(0)
+	let lng = country.latlng.at(1)
+	
+	if (country.capital) {
+		where_weather = country.capital
+		lat = country.capitalInfo.latlng.at(0)
+		lng = country.capitalInfo.latlng.at(1)
+	}
+	useEffect(() => {
+		weatherService
+			.getWeather(lat, lng)
+			.then(currentWeather => {
+				console.log(currentWeather.weather)
+				setWeather(currentWeather)
+			})
+	}, [])
+
+//	useEffect(() => {
+//		weatherService
+//			.getImage(weather.weather.icon)
+//			.then(image => setWeatherImage(image))
+//	}, [weather])
+	
+	if (!weather.at(0)) {
+		return (
+			<>
+			<h2>Weather in {where_weather}</h2>
+			<p>unavailable</p>
+			</>
+		)}
+	return (
+		<>
+			<h2>Weather in {where_weather}</h2>
+			<p>temperature {weather.main.temp - 273,15} celcius</p>
+			<p>wind {weather.wind.speed} ms</p>
+		</>
+	)
+}
+
 const DisplayOneCountry = ({country}) => {
 	const languages = Object.values(country.languages)
+
 	let capital
 	if (!country.capital)
 		capital = '>NOT FOUND<'
@@ -29,6 +75,7 @@ const DisplayOneCountry = ({country}) => {
 			{languages.map(language => <li key={language}>{language}</li>)}
 		</ul>
 		<img src={country.flags.png}/>
+		<DisplayWeather country={country} />
 		</>
 	)
 }

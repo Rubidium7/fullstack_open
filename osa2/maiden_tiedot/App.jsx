@@ -14,7 +14,7 @@ const CountryForm = ({country, handler}) => {
 }
 
 const DisplayWeather = ({country}) => {
-	const [weather, setWeather] = useState([])
+	const [weather, setWeather] = useState(null)
 	const [weatherImage, setWeatherImage] = useState(null)
 
 	let where_weather = country.name.common
@@ -30,18 +30,14 @@ const DisplayWeather = ({country}) => {
 		weatherService
 			.getWeather(lat, lng)
 			.then(currentWeather => {
-				console.log(currentWeather.weather)
 				setWeather(currentWeather)
+				if (currentWeather.weather.length > 0) {
+					setWeatherImage(`https://openweathermap.org/img/wn/${currentWeather.weather.at(0).icon}@2x.png`)
+				}
 			})
 	}, [])
-
-//	useEffect(() => {
-//		weatherService
-//			.getImage(weather.weather.icon)
-//			.then(image => setWeatherImage(image))
-//	}, [weather])
 	
-	if (!weather.at(0)) {
+	if (!weather) {
 		return (
 			<>
 			<h2>Weather in {where_weather}</h2>
@@ -51,8 +47,9 @@ const DisplayWeather = ({country}) => {
 	return (
 		<>
 			<h2>Weather in {where_weather}</h2>
-			<p>temperature {weather.main.temp - 273,15} celcius</p>
-			<p>wind {weather.wind.speed} ms</p>
+			<p>temperature {(weather.main.temp - 273.15).toPrecision(2)} celcius</p>
+			<img src={weatherImage}/>
+			<p>wind {weather.wind.speed} m/s</p>
 		</>
 	)
 }
@@ -62,7 +59,7 @@ const DisplayOneCountry = ({country}) => {
 
 	let capital
 	if (!country.capital)
-		capital = '>NOT FOUND<'
+		capital = '-'
 	else
 		capital = country.capital.at(0)
 	return (

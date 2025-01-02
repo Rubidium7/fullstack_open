@@ -189,6 +189,7 @@ const eight_blogs = [
 		__v: 0,
 	},
 ];
+
 test("dummy returns one", () => {
 	const result = listHelper.dummy(empty_list);
 	assert.strictEqual(result, 1);

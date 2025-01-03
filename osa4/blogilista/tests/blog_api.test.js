@@ -117,6 +117,28 @@ describe("testing post", () => {
 	});
 });
 
+describe("testing put", () => {
+	test("updating a blog", async (t) => {
+		const { __v, _id, ...blog } = initialBlogs[4];
+
+		blog.likes = 101;
+		const response = await api
+			.put(`/api/blogs/${_id}`)
+			.send(blog)
+			.expect(200);
+
+		blog.id = _id;
+		assert.deepStrictEqual(response.body, blog);
+	});
+
+	test("sending put with malformatted id", async () => {
+		const { __v, _id, ...blog } = initialBlogs[4];
+
+		const response = await api.put(`/api/blogs/0`).send(blog).expect(400);
+		assert.strictEqual(response.body.error, "malformatted id");
+	});
+});
+
 describe("testing delete", () => {
 	test("removing one blog", async () => {
 		await api.delete(`/api/blogs/${initialBlogs[0]._id}`).expect(204);

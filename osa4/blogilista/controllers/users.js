@@ -10,6 +10,15 @@ usersRouter.get("/", async (request, response) => {
 usersRouter.post("/", async (request, response) => {
 	const { name, username, password } = request.body;
 
+	if (!password) {
+		throw new ValidationError("password required");
+	}
+
+	if (password.length < 3)
+		throw new ValidationError(
+			"password needs to be atleast 3 characters long"
+		);
+
 	const saltRounds = 8;
 	const passwordHash = await bcrypt.hash(password, saltRounds);
 
